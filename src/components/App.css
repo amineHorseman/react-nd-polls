@@ -1,3 +1,4 @@
+/* shared */
 .App {
   text-align: center;
 }
@@ -6,7 +7,11 @@
   color: #61dafb;
 }
 
-/* Navigation bar */
+.center {
+  text-align: center;
+}
+
+/* Nav */
 nav {
   background-color: #e5e3e2;
   padding: 15px;
