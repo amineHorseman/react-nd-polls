@@ -1,11 +1,11 @@
 import './App.css';
-import Home from './Home';
-import Login from './Login';
-import Leaderboard from './Leaderboard';
-import AddQuestion from './AddQuestion';
-import Question from './Question';
-import Error404 from './Error404';
-import Nav from './Nav.js';
+import Home from '../components/Home.js';
+import Login from '../components/Login.js';
+import Leaderboard from '../components/Leaderboard.js';
+import AddQuestion from '../components/AddQuestion.js';
+import Question from '../components/Question.js';
+import Error404 from '../components/Error404.js';
+import Nav from '../components/Nav.js';
 
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useState } from 'react';
