@@ -1,7 +1,10 @@
 import './style.css';
+import { useSelector } from 'react-redux';
 import { NavLink } from "react-router-dom"
+import { selectAuthedUser } from '../features/auth/authSlice';
 
-const Nav = ({authedUser}) => {
+const Nav = () => { 
+    const authedUser = useSelector(selectAuthedUser);
     return (
       <nav>
         <NavLink to="/">Home</NavLink>

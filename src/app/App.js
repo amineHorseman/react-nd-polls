@@ -8,20 +8,22 @@ import Error404 from '../components/Error404.js';
 import Nav from '../components/Nav.js';
 
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { selectAuthedUser } from '../features/auth/authSlice'
 
 const App = (props) => {
-  const [authedUser, setAuthedUser] = useState("mtsamis"); //TODO: remove later
 
-  function RequireAuth({ children }) {
+  const RequireAuth = ({ children }) => {
+    // check authedUser and redirect to Login page if null
     const location = useLocation();
+    const authedUser = useSelector(selectAuthedUser);
     return authedUser !== null ? children : 
       <Navigate to="/login" replace state={{ path: location.pathname }} />;
   }
   
   return (
     <div className="App">
-      <Nav authedUser={authedUser} />
+      <Nav />
         <Routes>
           <Route path="/" exact element={<Home />} />
           <Route path="/login" exact element={<Login />} />
