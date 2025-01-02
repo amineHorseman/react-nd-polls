@@ -8,8 +8,10 @@ import Error404 from '../components/Error404.js';
 import Nav from '../components/Nav.js';
 
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { selectAuthedUser } from '../features/auth/authSlice'
+import { fetchUsers } from "../features/users/usersSlice";
+import { useEffect } from 'react';
 
 const App = (props) => {
 
@@ -20,6 +22,12 @@ const App = (props) => {
     return authedUser !== null ? children : 
       <Navigate to="/login" replace state={{ path: location.pathname }} />;
   }
+
+  // load initial data
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchUsers());
+  }, [dispatch]);
   
   return (
     <div className="App">
