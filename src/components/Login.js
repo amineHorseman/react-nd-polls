@@ -1,35 +1,55 @@
 import { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser } from "../features/auth/authSlice";
+import { loginUser, logoutUser } from "../features/auth/authSlice";
 import { selectUser } from "../features/users/usersSlice";
 
 const Login = (props) => {
     const location = useLocation();
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const [username, setUsername] = useState(null);
-    const [password, setPassword] = useState(null);
+
+    // check logout action
+    const searchParams = useSearchParams();
+    const action =  searchParams.get('action')
+    action === 'logout' && dispatch(logoutUser());
+
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
 
     const user = useSelector(state => selectUser(state, username));
     
     const handleUsernameChange = (e) => {
         setUsername(e.target.value);
+        setError('');
     };
     const handlePasswordChange = (e) => {
         setPassword(e.target.value);
+        setError('');
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (user && user['password'] === password) { 
-            dispatch(loginUser(username));
-            location.state? navigate(location.state["path"]) : navigate("/")
+        if (!user) {
+            setError('Username does not exist');
+            return;
         }
+        if (user.password !== password) {
+            setError('Incorrect password');
+            return;
+        }
+        dispatch(loginUser(username));
+        navigate(location.state?.path || "/");
     };
 
     return <div className="container mt-5">
             <div className="row justify-content-center">
+                {
+                    error && <div className="alert alert-danger" role="alert">
+                        {error}
+                    </div>
+                }
                 <div className="col-md-6 col-lg-4">
                     <div className="card">
                         <div className="card-body">
