@@ -1,18 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser, logoutUser } from "../features/auth/authSlice";
 import { selectUser } from "../features/users/usersSlice";
 
-const Login = (props) => {
+const Login = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const [searchParams] = useSearchParams();
 
     // check logout action
-    const searchParams = useSearchParams();
-    const action =  searchParams.get('action')
-    action === 'logout' && dispatch(logoutUser());
+    useEffect(() => {
+        const action =  searchParams.get('action')
+        action === 'logout' && dispatch(logoutUser());
+    }, [searchParams, dispatch]);
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -45,12 +47,12 @@ const Login = (props) => {
 
     return <div className="container mt-5">
             <div className="row justify-content-center">
-                {
-                    error && <div className="alert alert-danger" role="alert">
-                        {error}
-                    </div>
-                }
                 <div className="col-md-6 col-lg-4">
+                    {
+                        error && <div className="alert alert-danger" role="alert">
+                            {error}
+                        </div>
+                    }
                     <div className="card">
                         <div className="card-body">
                             <h3 className="card-title text-center mb-4">Login</h3>
