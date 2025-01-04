@@ -1,16 +1,15 @@
 import './style.css';
 import { useSelector } from 'react-redux';
 import { NavLink } from "react-router-dom"
-import { selectAuthedUser } from '../features/auth/authSlice';
+import { selectAuthedUserId } from '../features/auth/authSlice';
 
 const Nav = () => { 
-    const authedUser = useSelector(selectAuthedUser);
+    const authedUser = useSelector(selectAuthedUserId);
     return (
       <nav>
         <NavLink to="/">Home</NavLink>
         {
-          authedUser === null ? 
-            <NavLink to="/login">Login</NavLink> :
+          authedUser !== null &&
             <>
               <NavLink to="/add">Add Question</NavLink>
               <NavLink to="/leaderboard">Leaderboard</NavLink>
