@@ -8,7 +8,7 @@ import QuestionsList from '../components/QuestionsList.js';
 import Error404 from '../components/Error404.js';
 import Nav from '../components/Nav.js';
 
-import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectAuthedUserId } from '../features/auth/authSlice'
 import { fetchUsers } from "../features/users/usersSlice";
