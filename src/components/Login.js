@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser, logoutUser } from "../features/auth/authSlice";
 import { selectUser } from "../features/users/usersSlice";
@@ -65,15 +65,15 @@ const Login = () => {
                             <form onSubmit={handleSubmit}>
                                 <div className="mb-3">
                                     <label htmlFor="username" className="form-label">Username</label>
-                                    <input type="text" className="form-control" id="username" 
+                                    <input type="text" className="form-control" id="username" data-testid="username"
                                         placeholder="Enter username" onChange={handleUsernameChange} required />
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="password" className="form-label">Password</label>
-                                    <input type="password" className="form-control" id="password"
+                                    <input type="password" className="form-control" id="password" data-testid="password"
                                         placeholder="Enter password" onChange={handlePasswordChange} required />
                                 </div>
-                                <button type="submit" className="btn btn-primary w-100">Submit</button>
+                                <button type="submit" className="btn btn-primary w-100" data-testid="submit">Submit</button>
                             </form>
                         </div>
                     </div>
