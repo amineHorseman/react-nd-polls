@@ -1,7 +1,7 @@
 import { selectUser } from "../features/users/usersSlice";
 import { selectAuthedUserId } from "../features/auth/authSlice";
 import { useSelector } from "react-redux";
-import { displayUserAvatar } from "../utils/helpers";
+import { displayAvatar } from "../utils/helpers";
 
 const Sidebar = () => {
     const username = useSelector(selectAuthedUserId);
@@ -11,7 +11,7 @@ const Sidebar = () => {
         <div className="card">
             <div className="card-body text-center">
                 <div className="mb-2">
-                    { displayUserAvatar(user["avatarURL"]) }   
+                    { displayAvatar(user["avatarURL"]) }   
                 </div>
                 <h5 className="card-title mb-0">{username}</h5>
                 <p className="card-text text-muted">{user["name"]}</p>
