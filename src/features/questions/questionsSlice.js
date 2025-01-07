@@ -37,5 +37,5 @@ const questionsSlice = createSlice({
 });
 
 export const selectAllQuestions = (state) => state.questions.questions;
-export const selectQuestion = (state, id) => selectQuestion(state)[id];
+export const selectQuestion = (state, id) => selectAllQuestions(state)[id];
 export default questionsSlice.reducer;

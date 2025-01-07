@@ -1,7 +1,7 @@
 import { selectUser } from "../features/users/usersSlice";
 import { selectAuthedUserId } from "../features/auth/authSlice";
 import { useSelector } from "react-redux";
-import { FaCircleUser } from "react-icons/fa6";
+import { displayUserAvatar } from "../utils/helpers";
 
 const Sidebar = () => {
     const username = useSelector(selectAuthedUserId);
@@ -11,11 +11,7 @@ const Sidebar = () => {
         <div className="card">
             <div className="card-body text-center">
                 <div className="mb-2">
-                    {
-                        user["avatarURL"] === null ? <span ><FaCircleUser size="30" /></span> :
-                            <img src={user["avatarURL"]} className="rounded-circle" 
-                                alt="User avatar" width="30" height="30" />
-                    }   
+                    { displayUserAvatar(user["avatarURL"]) }   
                 </div>
                 <h5 className="card-title mb-0">{username}</h5>
                 <p className="card-text text-muted">{user["name"]}</p>

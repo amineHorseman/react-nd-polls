@@ -1,3 +1,9 @@
+/* Shared */ 
+.avatar > * {
+  width: 30px;
+  height: 30px;
+}
+
 /* Nav */
 nav {
   background-color: #e5e3e2;
