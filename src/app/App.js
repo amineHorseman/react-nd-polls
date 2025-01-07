@@ -12,6 +12,7 @@ import { Routes, Route, Navigate, useLocation } from 'react-router';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectAuthedUserId } from '../features/auth/authSlice'
 import { fetchUsers } from "../features/users/usersSlice";
+import { fetchQuestions } from "../features/questions/questionsSlice";
 import { useEffect } from 'react';
 
 const App = () => {
@@ -28,6 +29,7 @@ const App = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchUsers());
+    dispatch(fetchQuestions());
   }, [dispatch]);
 
   return (
