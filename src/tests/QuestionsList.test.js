@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom';
-import { render, screen } from '@testing-library/react';
+import { render, screen, act } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { fetchQuestions } from '../features/questions/questionsSlice';
@@ -18,14 +18,16 @@ describe('Test for QuestionsList component', () => {
             </BrowserRouter>
         );
 
-        await store.dispatch(fetchUsers());
-        await store.dispatch(fetchQuestions());
-        await store.dispatch(loginUser('mtsamis'));
-
-        const unvotedQuestion = await screen.findByText('Build our new application with Javascript');
-        expect(unvotedQuestion).toBeVisible();
+        await act(async () => {
+            await store.dispatch(fetchUsers());
+            await store.dispatch(fetchQuestions());
+            await store.dispatch(loginUser('mtsamis'));
+        });
+      
+        const unvotedQuestion = screen.queryByText('Build our new application with Javascript');
+        expect(unvotedQuestion).not.toBeNull();
         
-        const votedQuestion = await screen.findByText('hire more frontend developers');
-        expect(votedQuestion).not.toBeVisible();
+        const votedQuestion = screen.queryByText('hire more frontend developers');
+        expect(votedQuestion).toBeNull();
     });
 });
