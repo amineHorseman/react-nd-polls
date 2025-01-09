@@ -4,6 +4,14 @@
   height: 30px;
 }
 
+.btn-static {
+  background-color: var(--bs-btn-bg);
+  border-color: var(--bs-btn-border-color);
+  color: var(--bs-btn-color);
+  pointer-events: none;
+  cursor: default;
+}
+
 /* Nav */
 nav {
   background-color: #e5e3e2;
