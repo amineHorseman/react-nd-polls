@@ -67,3 +67,8 @@ nav a.active {
         margin: 0 auto;
     }
 }
+
+/* Question */
+.question p::first-letter, .question button::first-letter {
+    text-transform: capitalize;
+}
