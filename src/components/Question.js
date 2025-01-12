@@ -12,10 +12,14 @@ const Question = ({id, voted}) => {
 
     let userChoice = question.optionOne.text;
     let otherChoice = question.optionTwo.text;
+    let votes = [question.optionOne.votes.length, question.optionTwo.votes.length];
     if (voted && authedUser["answers"][id] === 'optionTwo') {
         userChoice = question.optionTwo.text;
         otherChoice = question.optionOne.text;
+        votes.reverse();
     }
+    const votesCount = votes[0] + votes[1];
+    const percentage = Math.round(votes[0]*100/votesCount);
     
     return (
         <div className="card shadow-sm question">
@@ -37,9 +41,10 @@ const Question = ({id, voted}) => {
                 {
                         voted ? (
                             <div className="d-grid col-6 gap-2 mx-auto">
-                                <p className="btn btn-primary btn-static">{userChoice}</p>
+                                <p className="btn btn-primary btn-static">{userChoice} ({percentage}% votes)</p>
                                 <h5 className="mb-1">Than</h5>
-                                <p className="btn btn-outline-danger btn-static">{otherChoice}</p>
+                                <p className="btn btn-outline-danger btn-static">{otherChoice} ({100-percentage}% votes)</p>
+                                <small className="col-12 text-muted mt-3">Total: {votesCount} votes</small>
                             </div>
                         ) : (
                             <div className="d-grid gap-2">
