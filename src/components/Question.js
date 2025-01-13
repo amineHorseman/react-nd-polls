@@ -3,26 +3,54 @@ import { selectQuestion } from "../features/questions/questionsSlice";
 import { selectUser } from "../features/users/usersSlice";
 import { displayAvatar, displayElapsedTime } from "../utils/helpers";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router";
 
-const Question = ({id, voted}) => {
+const Question = ({id, showDetails}) => {
+    const navigate = useNavigate();
     const question = useSelector(state => selectQuestion(state, id));
     const author = useSelector(state => selectUser(state, question.author));
     const authedUserId = useSelector(selectAuthedUserId);
     const authedUser = useSelector(state => selectUser(state, authedUserId));
+    const voted = authedUser["answers"][id];
 
     let userChoice = question.optionOne.text;
     let otherChoice = question.optionTwo.text;
-    let votes = [question.optionOne.votes.length, question.optionTwo.votes.length];
+    let votes = [question.optionOne.votes, question.optionTwo.votes];
     if (voted && authedUser["answers"][id] === 'optionTwo') {
         userChoice = question.optionTwo.text;
         otherChoice = question.optionOne.text;
         votes.reverse();
     }
-    const votesCount = votes[0] + votes[1];
-    const percentage = Math.round(votes[0]*100/votesCount);
-    
+    const votesCount = votes[0].length + votes[1].length;
+    const percentage = Math.round(votes[0].length * 100 / votesCount);
+
+    const handleClick = () => navigate(`/questions/${id}`);
+
+    const showUsersList = (users, percentage, title) => {
+        return (
+            <p>
+                {title} ({percentage}%): <br />
+                {users.map((username) => <span key={username}>{username}<br /></span>)}
+            </p>
+        );
+}
+
+    const showResults = () => {
+        return (
+            <div className="row mt-3 small">
+                <p className="col-12">Total: {votesCount} votes</p>
+                <div className="col-6">
+                {showUsersList(votes[0], percentage, "The following users voted the first option")}
+                </div>
+                <div className="col-6">
+                {showUsersList(votes[1], 100-percentage, "The following users voted the other option")}
+                </div>
+            </div>
+        );
+    }
+
     return (
-        <div className="card shadow-sm question">
+        {question} && <div className="card shadow-sm question" onClick={handleClick}>
             <div className="card-header bg-light">
                 <div className="d-flex justify-content-between align-items-center">
                     <div className="d-flex align-items-center">
@@ -36,15 +64,18 @@ const Question = ({id, voted}) => {
             </div>
             <div className="card-body">
                 <h5 className="card-title text-center mb-3">
-                    { voted? 'You Would Rather' : 'Would You Rather'}
+                    { voted? 'I Would Rather' : 'Would You Rather...'}
                 </h5>
-                {
-                        voted ? (
-                            <div className="d-grid col-6 gap-2 mx-auto">
-                                <p className="btn btn-primary btn-static">{userChoice} ({percentage}% votes)</p>
-                                <h5 className="mb-1">Than</h5>
-                                <p className="btn btn-outline-danger btn-static">{otherChoice} ({100-percentage}% votes)</p>
-                                <small className="col-12 text-muted mt-3">Total: {votesCount} votes</small>
+                { 
+                    voted ? (
+                            <div className="d-grid col-12 mx-auto">
+                                <div className="row col-8 mx-auto">
+                                    <p className="btn btn-primary btn-static">{userChoice} ({percentage}% votes)</p>
+                                    <h5 className="mb-1">Than</h5>
+                                    <p className="btn btn-outline-danger btn-static ">{otherChoice} ({100-percentage}% votes)</p>
+                                    {!showDetails && <small className="col-12 text-muted mt-2">Total: {votesCount} votes</small>}
+                                </div>
+                                { showDetails && showResults() }
                             </div>
                         ) : (
                             <div className="d-grid gap-2">
