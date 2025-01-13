@@ -7,15 +7,17 @@ import Question from "./Question";
 
 const QuestionsList = () => {
     const questions = useSelector(selectAllQuestions);
-    const username = useSelector(selectAuthedUserId);
-    const user = useSelector(state => selectUser(state, username));
+    const authedUserId = useSelector(selectAuthedUserId);
+    const authedUser = useSelector(state => selectUser(state, authedUserId));
     const [votedFilter, setVotedFilter] = useState(false);
     const [displayedQuestions, setDisplayedQuestions] = useState([]);
 
     const votedQuestions = Object.keys(questions)
-        .filter((id) => id in user.answers);
+        .filter((id) => id in authedUser.answers)
+        .sort((a, b) => questions[b].timestamp - questions[a].timestamp);
     const unvotedQuestions = Object.keys(questions)
-        .filter((id) => !(id in user.answers));
+        .filter((id) => !(id in authedUser.answers))
+        .sort((a, b) => questions[b].timestamp - questions[a].timestamp);
 
     useEffect(() => {
         votedFilter ? setDisplayedQuestions(votedQuestions) :
@@ -39,7 +41,7 @@ const QuestionsList = () => {
                 {
                     displayedQuestions.map((id) => (
                         <div key={id}>
-                            <Question id={id} voted={votedFilter} />
+                            <Question id={id} />
                         </div>
                 ))}
             </div>
