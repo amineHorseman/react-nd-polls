@@ -3,7 +3,7 @@ import Home from '../components/Home.js';
 import Login from '../components/Login.js';
 import Leaderboard from '../components/Leaderboard.js';
 import AddQuestion from '../components/AddQuestion.js';
-import Question from '../components/Question.js';
+import QuestionDetails from '../components/QuestionDetails.js';
 import QuestionsList from '../components/QuestionsList.js';
 import Error404 from '../components/Error404.js';
 import Nav from '../components/Nav.js';
@@ -40,7 +40,7 @@ const App = () => {
             <Route index exact element={<QuestionsList />} />
             <Route path="/leaderboard" exact element={<Leaderboard />} />
             <Route path="/add" exact element={<AddQuestion />} />
-            <Route path="/questions/:id" element={<Question />} />
+            <Route path="/questions/:id" element={<QuestionDetails />} />
           </Route>
           <Route path="/login" exact element={<Login />} />
           <Route path="*" element={<Error404 />} />
