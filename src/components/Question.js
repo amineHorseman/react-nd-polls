@@ -26,10 +26,10 @@ const Question = ({id, showDetails}) => {
 
     const handleClick = () => navigate(`/questions/${id}`);
 
-    const showUsersList = (users, percentage, title) => {
+    const showUsersList = (users, title) => {
         return (
             <p>
-                {title} ({percentage}%): <br />
+                {title} ({users.length} {users.length === 1 ? "user" : "users"}): <br />
                 {users.map((username) => <span key={username}>{username}<br /></span>)}
             </p>
         );
@@ -40,10 +40,10 @@ const Question = ({id, showDetails}) => {
             <div className="row mt-3 small">
                 <p className="col-12">Total: {votesCount} votes</p>
                 <div className="col-6">
-                {showUsersList(votes[0], percentage, "The following users voted the first option")}
+                {showUsersList(votes[0], "The following users voted for the first option")}
                 </div>
                 <div className="col-6">
-                {showUsersList(votes[1], 100-percentage, "The following users voted the other option")}
+                {showUsersList(votes[1], "The following users voted for the other option")}
                 </div>
             </div>
         );

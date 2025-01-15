@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { _getQuestions, _saveQuestion } from "../../utils/_DATA";
+import { _getQuestions, _saveQuestion, _deleteQuestion } from "../../utils/_DATA";
 
 const initialState = {
     questions: {},
@@ -19,6 +19,14 @@ export const addQuestion = createAsyncThunk(
     "questions/addQuestion",
     async (question) => {
         const response = await _saveQuestion(question);
+        return response;
+    }
+);
+
+export const removeQuestion = createAsyncThunk(
+    "questions/removeQuestion",
+    async (id) => {
+        const response = await _deleteQuestion(id);
         return response;
     }
 );
@@ -51,6 +59,17 @@ const questionsSlice = createSlice({
             .addCase(addQuestion.rejected, (state, action) => {
                 state.status = 'failed'
                 state.error = action.error.message
+            })
+            .addCase(removeQuestion.pending, (state, action) => {
+                state.status = 'pending';
+            })
+            .addCase(removeQuestion.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.questions = action.payload;
+            })
+            .addCase(removeQuestion.rejected, (state, action) => {
+                state.status = 'failed';
+                state.questions = action.error.message;
             })
     },
 });

@@ -212,6 +212,20 @@ export function _saveQuestionAnswer ({ authedUser, qid, answer }) {
   })
 }
 
+export function _deleteQuestion(id) {
+  return new Promise((resolve, reject) => {
+    if (!id) {
+      reject("Please provide question's ID");
+    }
+
+    setTimeout(() => {
+      const { [id]: question, ...remainingQuestions } = questions;
+      questions = remainingQuestions;
+
+      resolve(questions)
+    }, 500)
+  })
+}
 
 export function _updateUser(user) {
   return new Promise((resolve, reject) => {
