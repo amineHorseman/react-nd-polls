@@ -1,5 +1,4 @@
-import '@testing-library/jest-dom';
-import { _saveQuestion } from '../utils/_DATA';
+import { _saveQuestion, _updateUser, _deleteQuestion } from '../utils/_DATA';
 
 describe("Test for _DATA.js functions", () => {
 
@@ -26,6 +25,49 @@ describe("Test for _DATA.js functions", () => {
             optionOneText: 'First option'
         };
         await expect(_saveQuestion(question)).rejects.toMatch("Please provide optionOneText, optionTwoText, and author");
+    });
+
+    test("_updateUser() returns updated user when correct data is provided", async () => {
+        const user = {
+            id: 'mtsamis',
+            password:'xyz',
+            name: 'Mike',
+            avatarURL: null,
+            answers: {
+              "xj352vofupe1dqz9emx13r": 'optionOne',
+            },
+            questions: ['6ni6ok3ym7mf1p33lnez'],
+          }
+        const updatedUser = await _updateUser(user);
+
+        expect(updatedUser).toBeDefined();
+        expect(updatedUser.id).toEqual(user.id);
+        expect(updatedUser.password).toEqual(user.password);
+        expect(updatedUser.name).toEqual(user.name);
+        expect(updatedUser.avatarURL).toEqual(user.avatarURL);
+        expect(updatedUser.answers.lenght).toEqual(user.answers.lenght);
+        expect(updatedUser.questions.lenght).toEqual(user.questions.lenght);
+    });
+
+    test("_updateUser() returns an error when incorrect data is provided", async () => {
+        const user = {
+            id: 'mtsamis',
+          }
+        const keys = ["id", "password", "name", "avatarURL", "answers", "questions"];
+        await expect(_updateUser(user)).rejects.toMatch(`Please provide all User fields (${keys})`);
+    });
+
+    test("_deleteQuestion() returns updated questions object when correct data is provided", async () => {
+        const id = "xj352vofupe1dqz9emx13r";
+        const updatedQuestions = await _deleteQuestion(id);
+
+        expect(updatedQuestions).toBeDefined();
+        expect(Object.keys(updatedQuestions)).not.toContain(id);
+    });
+
+    test("_deleteQuestion() returns an error when incorrect data is provided", async () => {
+        const id = null;
+        await expect(_deleteQuestion(id)).rejects.toMatch("Please provide question's ID");
     });
 
 });
