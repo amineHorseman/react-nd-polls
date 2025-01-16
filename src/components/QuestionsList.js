@@ -1,14 +1,12 @@
 import { selectAllQuestions } from "../features/questions/questionsSlice";
-import { selectAuthedUserId } from "../features/auth/authSlice";
-import { selectUser } from "../features/users/usersSlice";
-import { useSelector } from "react-redux";
+import { useAuthedUser } from "../hooks/useAuthedUser";
 import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import Question from "./Question";
 
 const QuestionsList = () => {
     const questions = useSelector(selectAllQuestions);
-    const authedUserId = useSelector(selectAuthedUserId);
-    const authedUser = useSelector(state => selectUser(state, authedUserId));
+    const authedUser = useAuthedUser();
     const [votedFilter, setVotedFilter] = useState(false);
     const [displayedQuestions, setDisplayedQuestions] = useState([]);
 

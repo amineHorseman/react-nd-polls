@@ -1,7 +1,6 @@
 import { selectQuestion } from "../features/questions/questionsSlice";
-import { selectAuthedUserId } from "../features/auth/authSlice";
+import { useAuthedUser } from "../hooks/useAuthedUser";
 import { useParams, useNavigate } from "react-router";
-import { selectUser } from "../features/users/usersSlice";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import Question from "./Question";
@@ -20,9 +19,8 @@ const QuestionDetails = () => {
         navigate('/');
     };
 
-    const authedUserId = useSelector(selectAuthedUserId);
-    const authedUser = useSelector(state => selectUser(state, authedUserId));
-    const voted = authedUser["answers"][id];
+    const authedUser = useAuthedUser();
+    const voted = authedUser.answers[id];
 
     return (
         <div className="container">

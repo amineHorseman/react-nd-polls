@@ -1,22 +1,21 @@
-import { selectAuthedUserId } from "../features/auth/authSlice";
-import { selectQuestion } from "../features/questions/questionsSlice";
-import { selectUser } from "../features/users/usersSlice";
-import { displayAvatar, displayElapsedTime } from "../utils/helpers";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
+import { useAuthedUser } from "../hooks/useAuthedUser";
+import { selectUser } from "../features/users/usersSlice";
+import { selectQuestion } from "../features/questions/questionsSlice";
+import { displayAvatar, displayElapsedTime } from "../utils/helpers";
 
 const Question = ({id, showDetails}) => {
     const navigate = useNavigate();
     const question = useSelector(state => selectQuestion(state, id));
     const author = useSelector(state => selectUser(state, question.author));
-    const authedUserId = useSelector(selectAuthedUserId);
-    const authedUser = useSelector(state => selectUser(state, authedUserId));
-    const voted = authedUser["answers"][id];
+    const authedUser = useAuthedUser();
+    const voted = authedUser.answers[id];
 
     let userChoice = question.optionOne.text;
     let otherChoice = question.optionTwo.text;
     let votes = [question.optionOne.votes, question.optionTwo.votes];
-    if (voted && authedUser["answers"][id] === 'optionTwo') {
+    if (voted && authedUser.answers[id] === 'optionTwo') {
         userChoice = question.optionTwo.text;
         otherChoice = question.optionOne.text;
         votes.reverse();

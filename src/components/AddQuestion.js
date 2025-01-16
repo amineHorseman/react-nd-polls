@@ -1,15 +1,14 @@
 import { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
-import { selectAuthedUserId } from "../features/auth/authSlice";
+import { useAuthedUser } from "../hooks/useAuthedUser";
+import { updateUser } from "../features/users/usersSlice";
 import { addQuestion, removeQuestion } from "../features/questions/questionsSlice";
-import { selectUser, updateUser } from "../features/users/usersSlice";
 
 const AddQuestion = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const authedUserId = useSelector(selectAuthedUserId);
-    const authedUser = useSelector(state => selectUser(state, authedUserId));
+    const authedUser = useAuthedUser();
     const [optionOne, setOptionOne] = useState("");
     const [optionTwo, setOptionTwo] = useState("");
     const [error, setError] = useState("");
@@ -38,7 +37,7 @@ const AddQuestion = () => {
         return await dispatch(addQuestion({
             optionOneText: optionOne,
             optionTwoText: optionTwo,
-            author: authedUserId
+            author: authedUser.id
         }));
     };
 
