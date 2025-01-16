@@ -1,8 +1,7 @@
 import '@testing-library/jest-dom';
-import { render, screen, fireEvent } from '@testing-library/react';
-import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router';
+import { screen, fireEvent } from '@testing-library/react';
 import { fetchUsers } from '../features/users/usersSlice';
+import { wrapAndRenderComponent } from '../utils/testing_helpers';
 import Login from '../components/Login';
 import store from '../app/store';
 
@@ -18,13 +17,7 @@ const fillFormAndSubmit = (testUsername, testPassword) => {
 describe('Test for Login component', () => {
 
     test('Display username does not exist error', async () => {
-        render(
-            <BrowserRouter>
-                <Provider store={store}>
-                    <Login />
-                </Provider>
-            </BrowserRouter>
-        );
+        wrapAndRenderComponent(<Login />);
 
         await store.dispatch(fetchUsers());
         
@@ -37,13 +30,7 @@ describe('Test for Login component', () => {
     });
     
     test('Display incorrect password error', async () => {
-        render(
-            <BrowserRouter>
-                <Provider store={store}>
-                    <Login />
-                </Provider>
-            </BrowserRouter>
-        );
+        wrapAndRenderComponent(<Login />);
         
         await store.dispatch(fetchUsers());
 
@@ -56,13 +43,7 @@ describe('Test for Login component', () => {
     });
     
     test('Login successfully', async () => {
-        render(
-            <BrowserRouter>
-                <Provider store={store}>
-                    <Login />
-                </Provider>
-            </BrowserRouter>
-        );
+        wrapAndRenderComponent(<Login />);
 
         await store.dispatch(fetchUsers());
 

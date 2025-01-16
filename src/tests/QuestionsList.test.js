@@ -1,7 +1,6 @@
 import '@testing-library/jest-dom';
-import { render, screen, act } from '@testing-library/react';
-import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router';
+import { screen, act } from '@testing-library/react';
+import { wrapAndRenderComponent } from '../utils/testing_helpers';
 import { fetchQuestions } from '../features/questions/questionsSlice';
 import { fetchUsers } from '../features/users/usersSlice';
 import { loginUser } from '../features/auth/authSlice';
@@ -10,13 +9,7 @@ import store from '../app/store';
 
 describe('Test for QuestionsList component', () => {
     test("Successfully display unvoted questions", async () => {
-        render(
-            <BrowserRouter>
-                <Provider store={store}>
-                    <QuestionsList />
-                </Provider>
-            </BrowserRouter>
-        );
+        wrapAndRenderComponent(<QuestionsList />);
 
         await act(async () => {
             await store.dispatch(fetchUsers());
