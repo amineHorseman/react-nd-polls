@@ -1,5 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { _getQuestions, _saveQuestion, _deleteQuestion } from "../../utils/_DATA";
+import { _getQuestions, 
+         _saveQuestion,
+         _deleteQuestion,
+         _saveQuestionAnswer } from "../../utils/_DATA";
 
 const initialState = {
     questions: {},
@@ -10,24 +13,28 @@ const initialState = {
 export const fetchQuestions = createAsyncThunk(
     "questions/fetchQuestions",
     async () => {
-        const response = await _getQuestions();
-        return response;
+        return await _getQuestions();
     }
 )
 
 export const addQuestion = createAsyncThunk(
     "questions/addQuestion",
     async (question) => {
-        const response = await _saveQuestion(question);
-        return response;
+        return await _saveQuestion(question);
     }
 );
 
 export const removeQuestion = createAsyncThunk(
     "questions/removeQuestion",
     async (id) => {
-        const response = await _deleteQuestion(id);
-        return response;
+        return await _deleteQuestion(id);
+    }
+);
+
+export const answerQuestion = createAsyncThunk(
+    "questions/answerQuestion",
+    async (voteDetails) => {
+        return _saveQuestionAnswer(voteDetails);
     }
 );
 
@@ -49,7 +56,7 @@ const questionsSlice = createSlice({
                 state.status = 'failed'
                 state.error = action.error.message
             })
-            .addCase(addQuestion.pending, (state, action) => {
+            .addCase(addQuestion.pending, (state) => {
                 state.status = 'loading';
             })
             .addCase(addQuestion.fulfilled, (state, action) => {
@@ -60,7 +67,7 @@ const questionsSlice = createSlice({
                 state.status = 'failed'
                 state.error = action.error.message
             })
-            .addCase(removeQuestion.pending, (state, action) => {
+            .addCase(removeQuestion.pending, (state) => {
                 state.status = 'pending';
             })
             .addCase(removeQuestion.fulfilled, (state, action) => {
@@ -68,6 +75,16 @@ const questionsSlice = createSlice({
                 state.questions = action.payload;
             })
             .addCase(removeQuestion.rejected, (state, action) => {
+                state.status = 'failed';
+                state.questions = action.error.message;
+            })
+            .addCase(answerQuestion.pending, (state) => {
+                state.status = 'pending';
+            })
+            .addCase(answerQuestion.fulfilled, (state) => {
+                state.status = 'succeeded';
+            })
+            .addCase(answerQuestion.rejected, (state, action) => {
                 state.status = 'failed';
                 state.questions = action.error.message;
             })
