@@ -9,28 +9,33 @@ const AddQuestion = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const authedUser = useAuthedUser();
-    const [optionOne, setOptionOne] = useState("");
-    const [optionTwo, setOptionTwo] = useState("");
-    const [error, setError] = useState("");
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [formState, setFormState] = useState({
+        optionOne: "",
+        optionTwo: "",
+        error: "",
+        isSubmitting: false,
+    });
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setIsSubmitting(true);
-        const addQuestionResponse = await addQuestionRequest(optionOne, optionTwo);
+        setFormState(formState => ({...formState, isSubmitting: true}));
+        const addQuestionResponse = await addQuestionRequest(formState.optionOne, formState.optionTwo);
         if (addQuestionResponse.error)
-            setError("Failed to save question! Please try again.");
+            setFormState(formState => ({...formState,
+                isSubmitting: false,
+                error: "Failed to save question! Please try again."}));
         else {
             const updatedUser = addUserQuestion(addQuestionResponse.payload.id)
             const updateUserResponse = await updateUserRequest(updatedUser);
             if (updateUserResponse.error) {
-                setError("Failed to update user information! Please try again.");
+                setFormState(formState => ({...formState,
+                    isSubmitting: false,
+                    error: "Failed to update user information! Please try again."}));
                 await removeQuestionRequest(addQuestionResponse.payload.id);
             }
             else
                 navigate("/");
         }
-        setIsSubmitting(false);
     };
 
     const addQuestionRequest = async (optionOne, optionTwo) => {
@@ -68,25 +73,27 @@ const AddQuestion = () => {
                         </div>
                         <div className="card-body">
                             {
-                                error && <div className="alert alert-danger" role="alert">
-                                    {error}
+                                formState.error && <div className="alert alert-danger" role="alert">
+                                    {formState.error}
                                 </div>
                             }
                             <h5 className="card-title text-center mb-4">Would You Rather...</h5>
                             <form onSubmit={handleSubmit}>
                                 <div className="mb-3">
                                     <input type="text" className="form-control" data-testid="optionOne"
-                                        placeholder="Enter first option" value={optionOne}
-                                        onChange={(e) => setOptionOne(e.target.value)}  required />
+                                        placeholder="Enter first option" value={formState.optionOne}
+                                        onChange={(e) => setFormState(formState => ({...formState, optionOne:e.target.value}))}
+                                        required />
                                 </div>
                                 <div className="mb-4">
                                     <input type="text" className="form-control" data-testid="optionTwo"
-                                        placeholder="Enter second option" value={optionTwo}
-                                        onChange={(e) => setOptionTwo(e.target.value)} required />
+                                        placeholder="Enter second option" value={formState.optionTwo}
+                                        onChange={(e) => setFormState(formState => ({...formState, optionTwo:e.target.value}))}
+                                        required />
                                 </div>
                                 <div className="d-grid">
                                     <button type="submit" className="btn btn-primary" 
-                                        data-testid="submit" disabled={isSubmitting}>Submit</button>
+                                        data-testid="submit" disabled={formState.isSubmitting}>Submit</button>
                                 </div>
                             </form>
                         </div>

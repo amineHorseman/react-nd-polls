@@ -1,4 +1,4 @@
-import { useAuthedUser } from "../utils/useAuthedUser";
+import { useAuthedUser } from "../hooks/useAuthedUser";
 import { displayAvatar } from "../utils/helpers";
 
 const Sidebar = () => {
