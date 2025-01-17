@@ -1,8 +1,10 @@
+import { useUsersRanking } from "../hooks/useUsersRanking";
 import { useAuthedUser } from "../hooks/useAuthedUser";
 import { displayAvatar } from "../utils/helpers";
 
 const Sidebar = () => {
     const authedUser = useAuthedUser();
+    const { scores , authedUserRank } = useUsersRanking(authedUser.id);
 
     return <div className="sidebar">
         <div className="card">
@@ -15,12 +17,12 @@ const Sidebar = () => {
                 <hr />
                 <div className="row text-center">
                     <div className="col-6">
-                        <h6 className="mb-0">{authedUser.questions.length}</h6>
-                        <small className="text-muted">Questions</small>
+                        <h6 className="mb-0">{scores[authedUserRank].score}</h6>
+                        <small className="text-muted">Total Score</small>
                     </div>
                     <div className="col-6">
-                        <h6 className="mb-0">{Object.keys(authedUser.answers).length}</h6>
-                        <small className="text-muted">Answers</small>
+                        <h6 className="mb-0">{authedUserRank+1}</h6>
+                        <small className="text-muted">Ranking</small>
                     </div>
                 </div>
             </div>

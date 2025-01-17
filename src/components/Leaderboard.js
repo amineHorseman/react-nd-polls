@@ -1,20 +1,15 @@
-import { selectAllUsers } from "../features/users/usersSlice";
 import { selectAuthedUserId } from "../features/auth/authSlice";
+import { selectAllUsers } from "../features/users/usersSlice";
+import { useUsersRanking } from "../hooks/useUsersRanking";
 import { useSelector } from "react-redux";
 
 const Leaderboard = () => {
     const users = useSelector(selectAllUsers);
-    const authedUser = useSelector(selectAuthedUserId);
-
-    // compute users scores and ranking
-    let scores = Object.keys(users).map((id) => ({
-        id: users[id].id,
-        result: users[id].questions.length + Object.keys(users[id].answers).length
-    }));    
-    scores.sort((a, b) => (b.result - a.result));
+    const authedUserId = useSelector(selectAuthedUserId);
+    const { scores, authedUserRank } = useUsersRanking(authedUserId);
 
     return (
-        <div className="container mt-4 col-lg-9">
+        <div className="container mt-4 col-lg-10">
             <h2 className="mb-4">Leaderboard</h2>
             <div className="table-responsive">
                 <table className="table table-hover">
@@ -23,15 +18,19 @@ const Leaderboard = () => {
                             <th>Rank</th>
                             <th>User</th>
                             <th>Total Score</th>
+                            <th>Questions</th>
+                            <th>Answers</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {scores.map((score, index) => (
-                            <tr key={score.id}
-                                className={score.id === authedUser ? 'table-light' : ''}>
+                        { scores.map(({id, score}, index) => (
+                            <tr key={id}
+                                className={index === authedUserRank ? 'table-light' : ''}>
                                 <td>{index + 1}</td>
-                                <td>{users[score.id].name} <span className="text-muted">(@{score.id})</span></td>
-                                <td><strong>{score.result}</strong></td>
+                                <td>{users[id].name} <span className="text-muted">(@{id})</span></td>
+                                <td><strong>{score}</strong></td>
+                                <td>{users[id].questions.length}</td>
+                                <td>{Object.keys(users[id].answers).length}</td>
                             </tr>
                         ))}
                     </tbody>
