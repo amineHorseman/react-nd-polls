@@ -1,4 +1,7 @@
-import { _saveQuestion, _updateUser, _deleteQuestion } from '../utils/_DATA';
+import {_saveQuestion,
+        _updateUser,
+        _deleteQuestion,
+        _saveQuestionAnswer} from '../utils/_DATA';
 
 describe("Test for _DATA.js functions", () => {
 
@@ -68,6 +71,21 @@ describe("Test for _DATA.js functions", () => {
     test("_deleteQuestion() returns an error when incorrect data is provided", async () => {
         const id = null;
         await expect(_deleteQuestion(id)).rejects.toMatch("Please provide question's ID");
+    });
+
+    test("_saveQuestionAnswer() returns true when correct data is provided", async () => {
+        const authedUser = 'mtsamis';
+        const qid = "am8ehyc8byjqgar0jgpub9";
+        const answer = "optionOne";
+        const response = await _saveQuestionAnswer({authedUser, qid, answer});
+        expect(response).toEqual(true);
+    });
+
+    test("_saveQuestionAnswer() returns an error when incorrect data is provided", async () => {
+        const qid = "am8ehyc8byjqgar0jgpub9";
+        const answer = "optionOne";
+        await expect(_saveQuestionAnswer({qid, answer}))
+            .rejects.toMatch("Please provide authedUser, qid, and answer");
     });
 
 });
