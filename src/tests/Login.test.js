@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom';
+import { wrapAndRenderComponent } from '../utils/testing_helpers';
 import { screen, fireEvent } from '@testing-library/react';
 import { fetchUsers } from '../features/users/usersSlice';
-import { wrapAndRenderComponent } from '../utils/testing_helpers';
 import Login from '../components/Login';
 import store from '../app/store';
 
