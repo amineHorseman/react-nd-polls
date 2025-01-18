@@ -1,12 +1,13 @@
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { useAuthedUser } from "../hooks/useAuthedUser";
-import { selectUser } from "../features/users/usersSlice";
-import { selectQuestion } from "../features/questions/questionsSlice";
+import { useDispatch, useSelector } from "react-redux";
 import { displayAvatar, displayElapsedTime } from "../utils/helpers";
+import { fetchUsers, selectUser } from "../features/users/usersSlice";
+import { answerQuestion, fetchQuestions, selectQuestion } from "../features/questions/questionsSlice";
 
 const Question = ({id, showDetails}) => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const question = useSelector(state => selectQuestion(state, id));
     const author = useSelector(state => selectUser(state, question.author));
     const authedUser = useAuthedUser();
@@ -25,6 +26,19 @@ const Question = ({id, showDetails}) => {
 
     const handleClick = () => navigate(`/questions/${id}`);
 
+    const handleAnswer = async (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const voteDetails = {
+            authedUser: authedUser.id,
+            qid: id,
+            answer: e.target.name
+        };
+        await dispatch(answerQuestion(voteDetails));
+        dispatch(fetchQuestions());
+        dispatch(fetchUsers());
+    };
+
     const showUsersList = (users, title) => {
         return (
             <p>
@@ -32,7 +46,7 @@ const Question = ({id, showDetails}) => {
                 {users.map((username) => <span key={username}>{username}<br /></span>)}
             </p>
         );
-}
+    }
 
     const showResults = () => {
         return (
@@ -78,8 +92,10 @@ const Question = ({id, showDetails}) => {
                             </div>
                         ) : (
                             <div className="d-grid gap-2">
-                                <button className="btn btn-outline-primary">{question.optionOne.text}</button>
-                                <button className="btn btn-outline-primary">{question.optionTwo.text}</button>
+                                <button className="btn btn-outline-primary" name="optionOne" 
+                                    onClick={(e)=>{handleAnswer(e)}}>{question.optionOne.text}</button>
+                                <button className="btn btn-outline-primary" name="optionTwo" 
+                                    onClick={(e)=>{handleAnswer(e)}}>{question.optionTwo.text}</button>
                             </div>)
                 }
             </div>
