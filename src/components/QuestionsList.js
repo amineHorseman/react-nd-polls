@@ -2,6 +2,8 @@ import { selectAllQuestions } from "../features/questions/questionsSlice";
 import { useAuthedUser } from "../hooks/useAuthedUser";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { useMemo } from "react";
+
 import Question from "./Question";
 
 const QuestionsList = () => {
@@ -10,17 +12,24 @@ const QuestionsList = () => {
     const [votedFilter, setVotedFilter] = useState(false);
     const [displayedQuestions, setDisplayedQuestions] = useState([]);
 
-    const votedQuestions = Object.keys(questions)
-        .filter((id) => id in authedUser.answers)
-        .sort((a, b) => questions[b].timestamp - questions[a].timestamp);
-    const unvotedQuestions = Object.keys(questions)
-        .filter((id) => !(id in authedUser.answers))
-        .sort((a, b) => questions[b].timestamp - questions[a].timestamp);
+    const votedQuestions = useMemo(() =>
+        Object.keys(questions)
+                .filter((id) => id in authedUser.answers)
+                .sort((a, b) => questions[b].timestamp - questions[a].timestamp),
+        [questions, authedUser.answers]
+    );
+
+    const unvotedQuestions = useMemo(() => 
+        Object.keys(questions)
+            .filter((id) => !(id in authedUser.answers))
+            .sort((a, b) => questions[b].timestamp - questions[a].timestamp),
+        [questions, authedUser.answers]
+    );
 
     useEffect(() => {
         votedFilter ? setDisplayedQuestions(votedQuestions) :
             setDisplayedQuestions(unvotedQuestions)
-    }, [votedFilter]);
+    }, [votedFilter, votedQuestions, unvotedQuestions]);
 
     function toggleVoted(e) {
         setVotedFilter(e.target.checked);
