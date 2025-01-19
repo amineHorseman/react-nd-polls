@@ -42,6 +42,7 @@ const questionsSlice = createSlice({
     name: 'questions',
     initialState,
     reducers: {
+        clearError: (state) => { state.error = '' },
         updateQuestionAnswers: (state, action) => {
             // optimistic update of the question's votes
             const { authedUser, qid, answer } = action.payload;
@@ -105,5 +106,7 @@ const questionsSlice = createSlice({
 export const selectAllQuestions = (state) => state.questions.questions;
 export const selectQuestion = (state, id) => selectAllQuestions(state)[id];
 export const selectQuestionsError = (state) => state.questions.error;
-export const { updateQuestionAnswers, revertQuestionAnswers } = questionsSlice.actions;
+export const { clearError, 
+    updateQuestionAnswers, 
+    revertQuestionAnswers } = questionsSlice.actions;
 export default questionsSlice.reducer;
