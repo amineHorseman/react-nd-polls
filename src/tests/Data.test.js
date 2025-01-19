@@ -30,6 +30,16 @@ describe("Test for _DATA.js functions", () => {
         await expect(_saveQuestion(question)).rejects.toMatch("Please provide optionOneText, optionTwoText, and author");
     });
 
+    test("_saveQuestion() returns an error when question already exists", async () => {
+        const question = {
+            author: 'mtsamis',
+            optionOneText: 'Repeating option1',
+            optionTwoText: 'Repeating option2'
+        };
+        await expect(_saveQuestion(question)).resolves.toBeDefined();
+        await expect(_saveQuestion(question)).rejects.toMatch("Poll already exists");
+    });
+
     test("_updateUser() returns updated user when correct data is provided", async () => {
         const user = {
             id: 'mtsamis',

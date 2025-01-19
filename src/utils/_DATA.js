@@ -160,10 +160,21 @@ function formatQuestion ({ optionOneText, optionTwoText, author }) {
   }
 }
 
+export const _questionExists = (optionOneText, optionTwoText) => {
+  return Object.keys(questions).filter((id) => (
+    questions[id].optionOne.text === optionOneText &&
+    questions[id].optionTwo.text === optionTwoText
+  )).length !== 0;
+};
+
 export function _saveQuestion (question) {
   return new Promise((resolve, reject) => {
     if (!question.optionOneText || !question.optionTwoText || !question.author) {
       reject("Please provide optionOneText, optionTwoText, and author");
+    }
+
+    if (_questionExists(question.optionOneText, question.optionTwoText)) {
+      reject("Poll already exists");
     }
 
     const formattedQuestion = formatQuestion(question)
