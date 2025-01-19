@@ -34,7 +34,7 @@ export const removeQuestion = createAsyncThunk(
 export const answerQuestion = createAsyncThunk(
     "questions/answerQuestion",
     async (voteDetails) => {
-        return _saveQuestionAnswer(voteDetails);
+        return await _saveQuestionAnswer(voteDetails);
     }
 );
 
@@ -42,6 +42,17 @@ const questionsSlice = createSlice({
     name: 'questions',
     initialState,
     reducers: {
+        updateQuestionAnswers: (state, action) => {
+            // optimistic update of the question's votes
+            const { authedUser, qid, answer } = action.payload;
+            state.questions[qid][answer].votes.push(authedUser);
+        },
+        revertQuestionAnswers: (state, action) => {
+            // Cancel optimistic update of the question's votes
+            const { authedUser, qid, answer } = action.payload;
+            const votes = state.questions[qid][answer].votes;
+            state.questions[qid][answer].votes = votes.filter(id => id !== authedUser);
+        }
     },
     extraReducers: builder => {
         builder
@@ -76,7 +87,7 @@ const questionsSlice = createSlice({
             })
             .addCase(removeQuestion.rejected, (state, action) => {
                 state.status = 'failed';
-                state.questions = action.error.message;
+                state.error = action.error.message;
             })
             .addCase(answerQuestion.pending, (state) => {
                 state.status = 'pending';
@@ -86,11 +97,13 @@ const questionsSlice = createSlice({
             })
             .addCase(answerQuestion.rejected, (state, action) => {
                 state.status = 'failed';
-                state.questions = action.error.message;
+                state.error = action.error.message;
             })
     },
 });
 
 export const selectAllQuestions = (state) => state.questions.questions;
 export const selectQuestion = (state, id) => selectAllQuestions(state)[id];
+export const selectQuestionsError = (state) => state.questions.error;
+export const { updateQuestionAnswers, revertQuestionAnswers } = questionsSlice.actions;
 export default questionsSlice.reducer;

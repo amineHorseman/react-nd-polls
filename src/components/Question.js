@@ -2,8 +2,11 @@ import { useNavigate } from "react-router";
 import { useAuthedUser } from "../hooks/useAuthedUser";
 import { useDispatch, useSelector } from "react-redux";
 import { displayAvatar, displayElapsedTime } from "../utils/helpers";
-import { fetchUsers, selectUser } from "../features/users/usersSlice";
-import { answerQuestion, fetchQuestions, selectQuestion } from "../features/questions/questionsSlice";
+import { revertUserAnswers, selectUser, updateUserAnswers } from "../features/users/usersSlice";
+import { answerQuestion, 
+         selectQuestion,
+         updateQuestionAnswers,
+         revertQuestionAnswers } from "../features/questions/questionsSlice";
 
 const Question = ({id, showDetails}) => {
     const navigate = useNavigate();
@@ -34,9 +37,13 @@ const Question = ({id, showDetails}) => {
             qid: id,
             answer: e.target.name
         };
-        await dispatch(answerQuestion(voteDetails));
-        dispatch(fetchQuestions());
-        dispatch(fetchUsers());
+        dispatch(updateUserAnswers(voteDetails)); // optimistic update
+        dispatch(updateQuestionAnswers(voteDetails)); // optimistic update
+        const response = await dispatch(answerQuestion(voteDetails));
+        if (response.error) {
+            dispatch(revertUserAnswers(voteDetails));
+            dispatch(revertQuestionAnswers(voteDetails));
+        }
     };
 
     const showUsersList = (users, title) => {
