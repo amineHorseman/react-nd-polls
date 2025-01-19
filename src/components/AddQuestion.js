@@ -18,27 +18,25 @@ const AddQuestion = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setFormState(formState => ({...formState, isSubmitting: true}));
-        const addQuestionResponse = await addQuestionRequest(formState.optionOne, formState.optionTwo);
-        if (addQuestionResponse.error)
-            setFormState(formState => ({...formState,
+        setFormState(formState => ({...formState, isSubmitting: true, error: ""}));
+        try {
+            checkIdenticalOptions();
+            const id = await saveQuestion(formState.optionOne, formState.optionTwo);
+            await updateUserQuestions(id);
+            navigate("/");
+        } catch (error) {
+            setFormState(formState => ({...formState, 
                 isSubmitting: false,
-                error: "Failed to save question! Please try again."}));
-        else {
-            const updatedUser = addUserQuestion(addQuestionResponse.payload.id)
-            const updateUserResponse = await updateUserRequest(updatedUser);
-            if (updateUserResponse.error) {
-                setFormState(formState => ({...formState,
-                    isSubmitting: false,
-                    error: "Failed to update user information! Please try again."}));
-                await removeQuestionRequest(addQuestionResponse.payload.id);
-            }
-            else
-                navigate("/");
+                error: error.message}));
         }
     };
 
-    const addQuestionRequest = async (optionOne, optionTwo) => {
+    const checkIdenticalOptions = () => {
+        if (formState.optionOne === formState.optionTwo)
+            throw new Error("Both options are identical! Please change one of them.");
+    }
+
+    const dispatchAddQuestion = async (optionOne, optionTwo) => {
         return await dispatch(addQuestion({
             optionOneText: optionOne,
             optionTwoText: optionTwo,
@@ -46,21 +44,37 @@ const AddQuestion = () => {
         }));
     };
 
-    const removeQuestionRequest = async (id) => {
+    const dispatchRemoveQuestion = async (id) => {
         return await dispatch(removeQuestion(id));
     };
 
-    const updateUserRequest = async (updatedUser) => {
+    const dispatchUpdateUser = async (updatedUser) => {
         return await dispatch(updateUser({
             ...updatedUser
         }));
     };
 
-    const addUserQuestion = (questionId) => {
-        return {
-            ...authedUser,
+    const saveQuestion = async (optionOne, optionTwo) => {
+        const response = await dispatchAddQuestion(optionOne, optionTwo);
+        if (response.error) {
+            throw new Error(
+                response.error.message === "Poll already exists" ?
+                    "Poll already exists! Please change the question." :
+                    "Failed to save question! Please try again."
+            );
+        }
+        return response.payload.id;
+    };
+
+    const updateUserQuestions = async (questionId) => {
+        const updatedUser = {...authedUser,
             questions: [...authedUser.questions, questionId]
         };
+        const response = await dispatchUpdateUser(updatedUser);
+        if (response.error) {
+            await dispatchRemoveQuestion(questionId);
+            throw new Error("Failed to update user information! Please try again.");
+        }
     };
 
     return (
