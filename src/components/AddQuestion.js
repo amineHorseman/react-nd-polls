@@ -5,7 +5,7 @@ import { useAuthedUser } from "../hooks/useAuthedUser";
 import { updateUser } from "../features/users/usersSlice";
 import { addQuestion, removeQuestion } from "../features/questions/questionsSlice";
 
-const AddQuestion = () => {
+const AddQuestion = ({setProgressBarValue}) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const authedUser = useAuthedUser();
@@ -21,7 +21,11 @@ const AddQuestion = () => {
         setFormState(formState => ({...formState, isSubmitting: true, error: ""}));
         try {
             checkIdenticalOptions();
+            setProgressBarValue(20);
+
             const id = await saveQuestion(formState.optionOne, formState.optionTwo);
+            setProgressBarValue(50);
+
             await updateUserQuestions(id);
             navigate("/");
         } catch (error) {
@@ -29,6 +33,7 @@ const AddQuestion = () => {
                 isSubmitting: false,
                 error: error.message}));
         }
+        setProgressBarValue(100);
     };
 
     const checkIdenticalOptions = () => {

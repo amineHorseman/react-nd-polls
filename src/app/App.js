@@ -2,6 +2,7 @@ import './App.css';
 import Nav from '../components/Nav.js';
 import Home from '../components/Home.js';
 import Login from '../components/Login.js';
+import LoadingBar from 'react-top-loading-bar';
 import Error404 from '../components/Error404.js';
 import Leaderboard from '../components/Leaderboard.js';
 import AddQuestion from '../components/AddQuestion.js';
@@ -14,12 +15,13 @@ import { fetchQuestions } from "../features/questions/questionsSlice";
 import { Routes, Route, Navigate, useLocation } from 'react-router';
 import { fetchUsers } from "../features/users/usersSlice";
 import { useSelector, useDispatch } from 'react-redux';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const App = () => {
   const dispatch = useDispatch();
   const error = useSelector(selectQuestionsError);
   const authStatus = useSelector(selectAuthStatus);
+  const [progressBarValue, setProgressBarValue] = useState(0);
   
   const RequireAuth = ({ children }) => {
     // check authedUser and redirect to Login page if null
@@ -31,8 +33,10 @@ const App = () => {
 
   // load initial data
   useEffect(() => {
+    setProgressBarValue(0);
     dispatch(fetchUsers());
     dispatch(fetchQuestions());
+    setProgressBarValue(100);
   }, [dispatch]);
 
   // dismiss error notification
@@ -57,12 +61,13 @@ const App = () => {
 
   return (
     <div className="App">
+      <LoadingBar color='red' progress={progressBarValue} />
       <Nav />
       <Routes>
           <Route path="/" exact element={<RequireAuth><Home /></RequireAuth>}>
             <Route index exact element={<QuestionsList />} />
             <Route path="/leaderboard" exact element={<Leaderboard />} />
-            <Route path="/add" exact element={<AddQuestion />} />
+            <Route path="/add" exact element={<AddQuestion setProgressBarValue={setProgressBarValue} />} />
             <Route path="/questions/:id" element={<QuestionDetails />} />
           </Route>
           <Route path="/login" exact element={<Login />} />
