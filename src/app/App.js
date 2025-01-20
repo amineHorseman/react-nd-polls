@@ -8,10 +8,10 @@ import AddQuestion from '../components/AddQuestion.js';
 import QuestionsList from '../components/QuestionsList.js';
 import QuestionDetails from '../components/QuestionDetails.js';
 
+import { selectAuthedUserId, selectAuthStatus, clearAuthStatus } from '../features/auth/authSlice';
 import { clearError, selectQuestionsError } from "../features/questions/questionsSlice";
 import { fetchQuestions } from "../features/questions/questionsSlice";
 import { Routes, Route, Navigate, useLocation } from 'react-router';
-import { selectAuthedUserId } from '../features/auth/authSlice';
 import { fetchUsers } from "../features/users/usersSlice";
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
@@ -19,7 +19,8 @@ import { useEffect } from 'react';
 const App = () => {
   const dispatch = useDispatch();
   const error = useSelector(selectQuestionsError);
-
+  const authStatus = useSelector(selectAuthStatus);
+  
   const RequireAuth = ({ children }) => {
     // check authedUser and redirect to Login page if null
     const location = useLocation();
@@ -44,6 +45,16 @@ const App = () => {
     }
   }, [error, dispatch]);
 
+  // dismiss auth status notification
+  useEffect(() => {
+    if (authStatus) {
+      const timer = setTimeout(() => {
+        dispatch(clearAuthStatus());
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [authStatus, dispatch]);
+
   return (
     <div className="App">
       <Nav />
@@ -61,6 +72,12 @@ const App = () => {
         // show error notification
         error && <div className="alert alert-danger position-fixed bottom-0 start-0 w-auto" Style="margin-left: 10px;">
             An error occurred! Please try again.
+        </div>
+      }
+      {
+        // show auth status notification
+        authStatus && <div className="alert alert-info position-fixed bottom-0 start-0 w-auto" Style="margin-left: 10px;">
+            {authStatus}
         </div>
       }
     </div>

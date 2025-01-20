@@ -1,47 +1,61 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate, useSearchParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser, logoutUser } from "../features/auth/authSlice";
 import { selectUser } from "../features/users/usersSlice";
+import { loginUser, logoutUser } from "../features/auth/authSlice";
+import { useLocation, useNavigate, useSearchParams } from "react-router";
 
 const Login = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [searchParams] = useSearchParams();
+    const [formState, setFormState] = useState({
+        username: '',
+        password: '',
+        error: '',
+        infoMessage: ''
+    });
+    const user = useSelector(state => selectUser(state, formState.username));
 
-    // check logout action
     useEffect(() => {
-        const action =  searchParams.get('action')
-        action === 'logout' && dispatch(logoutUser());
-    }, [searchParams, dispatch]);
+        // check logout action
+        const action = searchParams.get('action');
+        if (action === 'logout') {
+            dispatch(logoutUser());
+            setFormState(formState => ({...formState, 
+                infoMessage: '', error: ''}));
+        }
+        else {
+            location.state && setFormState(formState => ({...formState,
+                infoMessage: 'Please login to access this page.',
+                error: ''}));
+        }
+    }, [searchParams, location.state, dispatch]);
 
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
-
-    const user = useSelector(state => selectUser(state, username));
-    
     const handleUsernameChange = (e) => {
-        setUsername(e.target.value);
-        setError('');
+        setFormState(formState => ({...formState, 
+            username: e.target.value,
+            error: ''}));
     };
     const handlePasswordChange = (e) => {
-        setPassword(e.target.value);
-        setError('');
+        setFormState(formState => ({...formState, 
+            password: e.target.value,
+            error: ''}));
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
         if (!user) {
-            setError('Username does not exist');
+            setFormState(formState => ({...formState, 
+                error: 'Username does not exist'}));
             return;
         }
-        if (user.password !== password) {
-            setError('Incorrect password');
+        if (user.password !== formState.password) {
+            setFormState(formState => ({...formState, 
+                error: 'Incorrect password'}));
             return;
         }
-        dispatch(loginUser(username));
+        dispatch(loginUser(formState.username));
         navigate(location.state?.path || "/");
     };
 
@@ -49,17 +63,17 @@ const Login = () => {
             <div className="row justify-content-center">
                 <div className="col-md-6 col-lg-4">
                     {
-                        error && <div className="alert alert-danger" role="alert">
-                            {error}
+                        formState.error && <div className="alert alert-danger" role="alert">
+                            {formState.error}
                         </div>
                     }
                     <div className="card">
                         <div className="card-body">
                             <h3 className="card-title text-center mb-4">Login</h3>
-                            {   // Show notice if redirected from another page
-                                location.state !== null && 
+                            {
+                                formState.infoMessage && 
                                     <div className="alert alert-info">
-                                        Please login to access this page.
+                                        {formState.infoMessage}
                                     </div>
                             }
                             <form onSubmit={handleSubmit}>
