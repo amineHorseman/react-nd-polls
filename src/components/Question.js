@@ -16,6 +16,8 @@ const Question = ({id, showDetails}) => {
     const authedUser = useAuthedUser();
     const voted = authedUser.answers[id];
 
+    // Compute the number of votes and percentage for each option.
+    // The authed user's voted option is stored in `userChoice` variable.
     let userChoice = question.optionOne.text;
     let otherChoice = question.optionTwo.text;
     let votes = [question.optionOne.votes, question.optionTwo.votes];
@@ -27,9 +29,13 @@ const Question = ({id, showDetails}) => {
     const votesCount = votes[0].length + votes[1].length;
     const percentage = Math.round(votes[0].length * 100 / votesCount);
 
+    // display the poll individually on a separate page when the user
+    // clicks on the question's item
     const handleClick = () => navigate(`/questions/${id}`);
 
     const handleAnswer = async (e) => {
+        // Record the user's voted option by dispatching the answerQuestion action.
+        // Optimistic updates are applied, then reverted if something wrong happens.
         e.preventDefault();
         e.stopPropagation();
         const voteDetails = {
@@ -47,6 +53,7 @@ const Question = ({id, showDetails}) => {
     };
 
     const showUsersList = (users, title) => {
+        // Dispaly users list from an array of usernames (used to show results)
         return (
             <p>
                 {title} ({users.length} {users.length === 1 ? "user" : "users"}): <br />
@@ -56,6 +63,7 @@ const Question = ({id, showDetails}) => {
     }
 
     const showResults = () => {
+        // Show users list for each option
         return (
             <div className="row mt-3 small">
                 <p className="col-12">Total: {votesCount} votes</p>
@@ -87,7 +95,7 @@ const Question = ({id, showDetails}) => {
                     { voted? 'I Would Rather' : 'Would You Rather...'}
                 </h5>
                 { 
-                    voted ? (
+                    voted ? (   // Display voted option and vote results
                             <div className="d-grid col-12 mx-auto">
                                 <div className="row col-8 mx-auto">
                                     <p className="btn btn-primary btn-static">{userChoice} ({percentage}% votes)</p>
@@ -97,7 +105,7 @@ const Question = ({id, showDetails}) => {
                                 </div>
                                 { showDetails && showResults() }
                             </div>
-                        ) : (
+                        ) : (   // Display clickable buttons to vote on each option
                             <div className="d-grid gap-2">
                                 <button className="btn btn-outline-primary" name="optionOne" 
                                     onClick={(e)=>{handleAnswer(e)}}>{question.optionOne.text}</button>

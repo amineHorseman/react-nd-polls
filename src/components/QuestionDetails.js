@@ -10,10 +10,12 @@ const QuestionDetails = () => {
     const {id} = useParams();
     const question = useSelector(state => selectQuestion(state, id));
 
+    // redirect to Error404 page if incorrect URL
     useEffect(() => {
-        question == null && navigate("/");
+        question == null && navigate("/Error404");
     }, [navigate, question]);
 
+    // redirect to Home page when button is clicked
     const returnHome = (e) => {
         e.stopPropagation();
         navigate('/');
@@ -22,6 +24,7 @@ const QuestionDetails = () => {
     const authedUser = useAuthedUser();
     const voted = authedUser.answers[id];
 
+    // display the Question component individually with the vote results 
     return (
         <div className="container">
             {question && <Question id={id} showDetails={true} />}

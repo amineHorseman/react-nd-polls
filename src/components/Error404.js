@@ -1,7 +1,7 @@
 import { Link } from "react-router";
 
 const Error404 = () => {
-    return <div className="center">
+    return <div className="center mt-5">
         <h1>Error 404</h1>
         <p>The page you're looking for does not exist.</p>
         <Link to="/">Return to homepage</Link>

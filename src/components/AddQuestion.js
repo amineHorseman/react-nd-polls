@@ -17,6 +17,7 @@ const AddQuestion = ({setProgressBarValue}) => {
     });
 
     const handleSubmit = async (e) => {
+        // Record a new Poll and update user's state accordingly
         e.preventDefault();
         setFormState(formState => ({...formState, isSubmitting: true, error: ""}));
         try {
@@ -60,6 +61,7 @@ const AddQuestion = ({setProgressBarValue}) => {
     };
 
     const saveQuestion = async (optionOne, optionTwo) => {
+        // dispatch action to add a new question to the `questions` state 
         const response = await dispatchAddQuestion(optionOne, optionTwo);
         if (response.error) {
             throw new Error(
@@ -72,6 +74,7 @@ const AddQuestion = ({setProgressBarValue}) => {
     };
 
     const updateUserQuestions = async (questionId) => {
+        // dispatch action to add the new question's id to the `users` state
         const updatedUser = {...authedUser,
             questions: [...authedUser.questions, questionId]
         };

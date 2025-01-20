@@ -19,7 +19,7 @@ export function displayElapsedTime(timestamp) {
 }
 
 export function getElapsedTime(timestamp) {
-    // Computer the elapsed time since 'timestamp', and returns it as a readable string
+    // Compute the elapsed time since 'timestamp', and returns it as a readable string
     const elapsedTimestamp = Date.now() - timestamp; 
     const minutes = Math.floor(elapsedTimestamp / (1000 * 60));
     const hours = Math.floor(minutes / 60);

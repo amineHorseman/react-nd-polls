@@ -12,6 +12,7 @@ const QuestionsList = () => {
     const [votedFilter, setVotedFilter] = useState(false);
     const [displayedQuestions, setDisplayedQuestions] = useState([]);
 
+    // filter questions that have already been answered by the authed user
     const votedQuestions = useMemo(() =>
         Object.keys(questions)
                 .filter((id) => id in authedUser.answers)
@@ -19,6 +20,7 @@ const QuestionsList = () => {
         [questions, authedUser.answers]
     );
 
+    // filter questions that have not been answered yet by the authedUser
     const unvotedQuestions = useMemo(() => 
         Object.keys(questions)
             .filter((id) => !(id in authedUser.answers))
@@ -26,6 +28,8 @@ const QuestionsList = () => {
         [questions, authedUser.answers]
     );
 
+    // change the list of filtered questions to display on screen when the
+    // toggle button is switched on/off
     useEffect(() => {
         votedFilter ? setDisplayedQuestions(votedQuestions) :
             setDisplayedQuestions(unvotedQuestions)
@@ -45,11 +49,12 @@ const QuestionsList = () => {
                 </span>
             </div>
             <div className="row g-4">
-                {
-                    displayedQuestions.map((id) => (
-                        <div key={id}>
-                            <Question id={id} />
-                        </div>
+                { 
+                    displayedQuestions.length === 0 ? <p>Nothing to display!</p> : 
+                        displayedQuestions.map((id) => (
+                            <div key={id}>
+                                <Question id={id} />
+                            </div>
                 ))}
             </div>
         </div>

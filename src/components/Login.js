@@ -44,6 +44,7 @@ const Login = () => {
     };
 
     const handleSubmit = (e) => {
+        // dispatch action to login user (will set up `auth` state)
         e.preventDefault();
         if (!user) {
             setFormState(formState => ({...formState, 

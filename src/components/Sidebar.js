@@ -6,6 +6,7 @@ const Sidebar = () => {
     const authedUser = useAuthedUser();
     const { scores , authedUserRank } = useUsersRanking(authedUser.id);
 
+    // display the user's avatar, total score, and ranking
     return <div className="sidebar">
         <div className="card">
             <div className="card-body text-center">
