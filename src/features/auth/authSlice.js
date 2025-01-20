@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     username: null,
-    status: 'idle',
+    status: '',
 };
 
 const authSlice = createSlice({
@@ -14,11 +14,16 @@ const authSlice = createSlice({
         },
         logoutUser(state) {
             state.username = null;
+            state.status = 'You have been logged out.';
+        },
+        clearAuthStatus(state) {
+            state.status = '';
         }
     },
 });
 
 export const selectAuthedUserId = (state) => state.auth.username;
+export const selectAuthStatus = (state) => state.auth.status;
 
-export const { loginUser, logoutUser } = authSlice.actions;
+export const { loginUser, logoutUser, clearAuthStatus } = authSlice.actions;
 export default authSlice.reducer;
