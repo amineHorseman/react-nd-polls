@@ -1,5 +1,6 @@
-import {_saveQuestion,
+import {_saveUser,
         _updateUser,
+        _saveQuestion,
         _deleteQuestion,
         _saveQuestionAnswer} from '../utils/_DATA';
 
@@ -96,6 +97,21 @@ describe("Test for _DATA.js functions", () => {
         const answer = "optionOne";
         await expect(_saveQuestionAnswer({qid, answer}))
             .rejects.toMatch("Please provide authedUser, qid, and answer");
+    });
+
+    test("_saveUser() returns an error when incorrect data is provided", async () => {
+        const id = "j0hn";
+        const password = "xyz987";
+        await expect(_saveUser({id, password}))
+            .rejects.toMatch("Please provide all User fields");
+    });
+    
+    test("_saveUser() returns an error when user already exist", async () => {
+        const id = "mtsamis";
+        const name = "Mike Tsamis";
+        const password = "xyz123";
+        await expect(_saveUser({id, name, password}))
+            .rejects.toMatch("Username already exists");
     });
 
 });
