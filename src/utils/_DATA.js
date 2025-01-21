@@ -256,3 +256,31 @@ export function _updateUser(user) {
     }, 500)
   })
 }
+
+export function _saveUser(userData) {
+  return new Promise((resolve, reject) => {
+    const keys = ["id", "password", "name"];
+    const allKeyExists = keys.every(key => key in userData)
+    if (!allKeyExists) {
+      reject(`Please provide all User fields`);
+    }
+    
+    if (userData.id in users) {
+      reject('Username already exists');
+    }
+
+    const newUser = {...userData, 
+      avatarURL: null,
+      answers: {},
+      questions: []  
+    }
+
+    setTimeout(() => {
+      users = {
+        ...users,
+        [newUser.id]: newUser
+      };
+      resolve(newUser);
+    }, 500);
+  });
+}

@@ -2,6 +2,7 @@ import './App.css';
 import Nav from '../components/Nav.js';
 import Home from '../components/Home.js';
 import Login from '../components/Login.js';
+import Register from '../components/Register';
 import LoadingBar from 'react-top-loading-bar';
 import Error404 from '../components/Error404.js';
 import Leaderboard from '../components/Leaderboard.js';
@@ -71,6 +72,7 @@ const App = () => {
             <Route path="/questions/:id" element={<QuestionDetails />} />
           </Route>
           <Route path="/login" exact element={<Login />} />
+          <Route path="/register" element={<Register />} />
           <Route path="*" element={<Error404 />} />
       </Routes>
       {

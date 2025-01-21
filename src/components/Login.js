@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../features/users/usersSlice";
 import { loginUser, logoutUser } from "../features/auth/authSlice";
-import { useLocation, useNavigate, useSearchParams } from "react-router";
+import { useLocation, useNavigate, useSearchParams, Link } from "react-router";
 
 const Login = () => {
     const location = useLocation();
@@ -62,7 +62,7 @@ const Login = () => {
 
     return <div className="container mt-5">
             <div className="row justify-content-center">
-                <div className="col-md-6 col-lg-4">
+                <div className="col-md-7 col-lg-5">
                     {
                         formState.error && <div className="alert alert-danger" role="alert">
                             {formState.error}
@@ -91,6 +91,9 @@ const Login = () => {
                                         autoComplete="on"  />
                                 </div>
                                 <button type="submit" className="btn btn-primary w-100" data-testid="submit">Submit</button>
+                                <div className="mt-3 mb-3">
+                                    <Link to="/register">Create new account</Link>
+                                </div>
                             </form>
                         </div>
                     </div>

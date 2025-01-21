@@ -44,6 +44,7 @@ Please report any bug you find or a failed test run in the [Issues section](http
 ✅ Implemented:
 
 - User authentication (Login form)
+- User registration
 - Create & answer polls
 - Leaderboard
 - Loading progress bar
@@ -53,8 +54,7 @@ Please report any bug you find or a failed test run in the [Issues section](http
 
 🚧 Planned:
 
-- Advanced authentication
-- User registration
+- Advanced authentication (using email...)
 - Profile management
 - Avatars upload
 - Backend integration
