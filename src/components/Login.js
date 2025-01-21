@@ -81,12 +81,14 @@ const Login = () => {
                                 <div className="mb-3">
                                     <label htmlFor="username" className="form-label">Username</label>
                                     <input type="text" className="form-control" id="username" data-testid="username"
-                                        placeholder="Enter username" onChange={handleUsernameChange} required />
+                                        placeholder="Enter username" onChange={handleUsernameChange} required
+                                        autoComplete="on" />
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="password" className="form-label">Password</label>
                                     <input type="password" className="form-control" id="password" data-testid="password"
-                                        placeholder="Enter password" onChange={handlePasswordChange} required />
+                                        placeholder="Enter password" onChange={handlePasswordChange} required 
+                                        autoComplete="on"  />
                                 </div>
                                 <button type="submit" className="btn btn-primary w-100" data-testid="submit">Submit</button>
                             </form>

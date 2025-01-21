@@ -46,6 +46,7 @@ const Question = ({id, showDetails}) => {
         dispatch(updateUserAnswers(voteDetails)); // optimistic update
         dispatch(updateQuestionAnswers(voteDetails)); // optimistic update
         const response = await dispatch(answerQuestion(voteDetails));
+        navigate(`/questions/${id}`);
         if (response.error) {
             dispatch(revertUserAnswers(voteDetails));
             dispatch(revertQuestionAnswers(voteDetails));

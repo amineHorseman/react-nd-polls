@@ -75,13 +75,13 @@ const App = () => {
       </Routes>
       {
         // show error notification
-        error && <div className="alert alert-danger position-fixed bottom-0 start-0 w-auto" Style="margin-left: 10px;">
+        error && <div className="alert alert-danger position-fixed bottom-0 start-0 w-auto notification">
             An error occurred! Please try again.
         </div>
       }
       {
         // show auth status notification
-        authStatus && <div className="alert alert-info position-fixed bottom-0 start-0 w-auto" Style="margin-left: 10px;">
+        authStatus && <div className="alert alert-info position-fixed bottom-0 start-0 w-auto notification">
             {authStatus}
         </div>
       }

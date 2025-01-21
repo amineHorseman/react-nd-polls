@@ -72,3 +72,8 @@ nav a.active {
 .question p::first-letter, .question button::first-letter {
     text-transform: capitalize;
 }
+
+/* Notification */
+.notification {
+  margin-left: 10px;
+}

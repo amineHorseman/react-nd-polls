@@ -105,13 +105,13 @@ const AddQuestion = ({setProgressBarValue}) => {
                                     <input type="text" className="form-control" data-testid="optionOne"
                                         placeholder="Enter first option" value={formState.optionOne}
                                         onChange={(e) => setFormState(formState => ({...formState, optionOne:e.target.value}))}
-                                        required />
+                                        id="optionOne" required />
                                 </div>
                                 <div className="mb-4">
                                     <input type="text" className="form-control" data-testid="optionTwo"
                                         placeholder="Enter second option" value={formState.optionTwo}
                                         onChange={(e) => setFormState(formState => ({...formState, optionTwo:e.target.value}))}
-                                        required />
+                                        id="optionTwo" required />
                                 </div>
                                 <div className="d-grid">
                                     <button type="submit" className="btn btn-primary" 
