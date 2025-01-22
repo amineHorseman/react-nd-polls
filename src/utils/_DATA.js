@@ -171,12 +171,14 @@ export function _saveQuestion (question) {
   return new Promise((resolve, reject) => {
     if (!question.optionOneText || !question.optionTwoText || !question.author) {
       reject("Please provide optionOneText, optionTwoText, and author");
+      return;
     }
 
     if (_questionExists(question.optionOneText, question.optionTwoText)) {
       reject("Poll already exists");
+      return;
     }
-
+    
     const formattedQuestion = formatQuestion(question)
     setTimeout(() => {
       questions = {
@@ -193,6 +195,7 @@ export function _saveQuestionAnswer ({ authedUser, qid, answer }) {
   return new Promise((resolve, reject) => {
     if (!authedUser || !qid || !answer) {
       reject("Please provide authedUser, qid, and answer");
+      return;
     }
 
     setTimeout(() => {
@@ -227,6 +230,7 @@ export function _deleteQuestion(id) {
   return new Promise((resolve, reject) => {
     if (!id) {
       reject("Please provide question's ID");
+      return;
     }
 
     setTimeout(() => {
@@ -244,6 +248,7 @@ export function _updateUser(user) {
     const allKeyExists = keys.every(key => key in user)
     if (!allKeyExists) {
       reject(`Please provide all User fields (${keys})`);
+      return;
     }
 
     setTimeout(() => {
@@ -263,10 +268,12 @@ export function _saveUser(userData) {
     const allKeyExists = keys.every(key => key in userData)
     if (!allKeyExists) {
       reject(`Please provide all User fields`);
+      return;
     }
     
     if (userData.id in users) {
       reject('Username already exists');
+      return;
     }
 
     const newUser = {...userData, 

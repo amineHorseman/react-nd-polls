@@ -28,7 +28,8 @@ describe("Test for _DATA.js functions", () => {
         const question = {
             optionOneText: 'First option'
         };
-        await expect(_saveQuestion(question)).rejects.toMatch("Please provide optionOneText, optionTwoText, and author");
+        await expect(_saveQuestion(question)).rejects
+            .toMatch("Please provide optionOneText, optionTwoText, and author");
     });
 
     test("_saveQuestion() returns an error when question already exists", async () => {
