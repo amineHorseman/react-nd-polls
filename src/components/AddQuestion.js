@@ -2,8 +2,8 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { useAuthedUser } from "../hooks/useAuthedUser";
-import { updateUser } from "../features/users/usersSlice";
-import { addQuestion, removeQuestion } from "../features/questions/questionsSlice";
+import { addQuestion } from "../features/questions/questionsSlice";
+import { updateUserQuestions } from "../features/users/usersSlice";
 
 const AddQuestion = ({setProgressBarValue}) => {
     const dispatch = useDispatch();
@@ -22,12 +22,9 @@ const AddQuestion = ({setProgressBarValue}) => {
         setFormState(formState => ({...formState, isSubmitting: true, error: ""}));
         try {
             checkIdenticalOptions();
-            setProgressBarValue(20);
-
-            const id = await saveQuestion(formState.optionOne, formState.optionTwo);
-            setProgressBarValue(50);
-
-            await updateUserQuestions(id);
+            setProgressBarValue(40);
+            const qid = await saveQuestion(formState.optionOne, formState.optionTwo);
+            dispatch(updateUserQuestions({authedUser: authedUser.id, qid}))
             navigate("/");
         } catch (error) {
             setFormState(formState => ({...formState, 
@@ -50,16 +47,6 @@ const AddQuestion = ({setProgressBarValue}) => {
         }));
     };
 
-    const dispatchRemoveQuestion = async (id) => {
-        return await dispatch(removeQuestion(id));
-    };
-
-    const dispatchUpdateUser = async (updatedUser) => {
-        return await dispatch(updateUser({
-            ...updatedUser
-        }));
-    };
-
     const saveQuestion = async (optionOne, optionTwo) => {
         // dispatch action to add a new question to the `questions` state 
         const response = await dispatchAddQuestion(optionOne, optionTwo);
@@ -73,17 +60,6 @@ const AddQuestion = ({setProgressBarValue}) => {
         return response.payload.id;
     };
 
-    const updateUserQuestions = async (questionId) => {
-        // dispatch action to add the new question's id to the `users` state
-        const updatedUser = {...authedUser,
-            questions: [...authedUser.questions, questionId]
-        };
-        const response = await dispatchUpdateUser(updatedUser);
-        if (response.error) {
-            await dispatchRemoveQuestion(questionId);
-            throw new Error("Failed to update user information! Please try again.");
-        }
-    };
 
     return (
         <div className="container py-4">

@@ -186,6 +186,13 @@ export function _saveQuestion (question) {
         [formattedQuestion.id]: formattedQuestion
       }
 
+      const user = {
+        ...users[formattedQuestion.author],
+        questions: [...users[formattedQuestion.author].questions, 
+          formattedQuestion.id]
+      };
+      _updateUser(user)
+
       resolve(formattedQuestion)
     }, 1000)
   })

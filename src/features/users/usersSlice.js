@@ -44,7 +44,12 @@ const usersSlice = createSlice({
             // Cancel optimistic update of the user["answers"]
             const { authedUser, qid } = action.payload;
             delete state.users[authedUser].answers[qid];
-        }
+        },
+        updateUserQuestions: (state, action) => {
+            // optimistic update of the user["questions"] array
+            const { authedUser, qid } = action.payload;
+            state.users[authedUser].questions.push(qid);
+        },
     },
     extraReducers: builder => {
         builder
@@ -80,5 +85,5 @@ const usersSlice = createSlice({
 
 export const selectAllUsers = (state) => state.users.users;
 export const selectUser = (state, id) => selectAllUsers(state)[id];
-export const { updateUserAnswers, revertUserAnswers } = usersSlice.actions;
+export const { updateUserAnswers, revertUserAnswers, updateUserQuestions } = usersSlice.actions;
 export default usersSlice.reducer;
