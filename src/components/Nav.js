@@ -13,6 +13,7 @@ const Nav = () => {
               <>
                 <NavLink to="/add">Add Question</NavLink>
                 <NavLink to="/leaderboard">Leaderboard</NavLink>
+                <NavLink to="/profile">Profile</NavLink>
                 <NavLink to={{ pathname: "/login", search: "?action=logout" }}>Logout</NavLink>
               </>
             ) : (

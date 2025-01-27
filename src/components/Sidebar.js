@@ -1,6 +1,7 @@
 import { useUsersRanking } from "../hooks/useUsersRanking";
 import { useAuthedUser } from "../hooks/useAuthedUser";
 import { displayAvatar } from "../utils/helpers";
+import { Link } from "react-router";
 
 const Sidebar = () => {
     const authedUser = useAuthedUser();
@@ -13,7 +14,9 @@ const Sidebar = () => {
                 <div className="mb-2">
                     { displayAvatar(authedUser.avatarURL) }   
                 </div>
-                <h5 className="card-title mb-0">{authedUser.id}</h5>
+                <h5 className="card-title mb-0">
+                    <Link to="profile">{authedUser.id}</Link>
+                </h5>
                 <p className="card-text text-muted">{authedUser.name}</p>
                 <hr />
                 <div className="row text-center">

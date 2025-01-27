@@ -2,6 +2,7 @@ import './App.css';
 import Nav from '../components/Nav.js';
 import Home from '../components/Home.js';
 import Login from '../components/Login.js';
+import Profile from '../components/Profile';
 import Register from '../components/Register';
 import LoadingBar from 'react-top-loading-bar';
 import Error404 from '../components/Error404.js';
@@ -72,6 +73,7 @@ const App = () => {
             <Route path="/leaderboard" exact element={<Leaderboard />} />
             <Route path="/add" exact element={<AddQuestion setProgressBarValue={setProgressBarValue} />} />
             <Route path="/questions/:id" element={<QuestionDetails />} />
+            <Route path="/profile" element={<Profile />} />
           </Route>
           <Route path="/login" exact element={<Login />} />
           <Route path="/register" element={<Register />} />
