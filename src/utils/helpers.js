@@ -41,8 +41,28 @@ export function getElapsedTime(timestamp) {
         return 'less than a minute ago'
 }
 
-export const handleFormChange = (e, field, setFormState) => {
+export function handleFormChange(e, field, setFormState) {
     setFormState(formState => ({...formState, 
         [field]: e.target.value,
         error: ''}));
+}
+
+export function displayAlertDiv(message, alertType) {
+    if (message)
+    {
+        return <div className={"alert alert-" + alertType} role="alert">
+            {message}
+        </div>;
+    }
+}
+
+export function displayNotificationDiv(message, alertType) {
+    if (message)
+    {
+        return <div 
+            className={"alert position-fixed bottom-0 start-0 w-auto notification alert-" + alertType}
+            role="alert">
+                {message}
+        </div>;
+    }
 }

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
+import { displayAlertDiv } from "../utils/helpers";
 import { handleFormChange } from "../utils/helpers";
 import { useAuthedUser } from "../hooks/useAuthedUser";
 import { addQuestion } from "../features/questions/questionsSlice";
@@ -71,11 +72,7 @@ const AddQuestion = ({setProgressBarValue}) => {
                             <h4 className="mb-0">Create a new Poll</h4>
                         </div>
                         <div className="card-body">
-                            {
-                                formState.error && <div className="alert alert-danger" role="alert">
-                                    {formState.error}
-                                </div>
-                            }
+                            {displayAlertDiv(formState.error, "danger")}
                             <h5 className="card-title text-center mb-4">Would You Rather...</h5>
                             <form onSubmit={handleSubmit}>
                                 <div className="mb-3">

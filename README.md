@@ -51,11 +51,11 @@ Please report any bug you find or a failed test run in the [Issues section](http
 - Optimistic updates
 - Disapearing notifications
 - Responsive UI
+- Profile management
 
 🚧 Planned:
 
 - Advanced authentication (using email...)
-- Profile management
 - Avatars upload
 - Backend integration
 - Admin dashboard

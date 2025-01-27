@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { displayAlertDiv } from "../utils/helpers";
 import { handleFormChange } from "../utils/helpers";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../features/users/usersSlice";
@@ -53,20 +54,11 @@ const Login = () => {
     return <div className="container mt-5">
             <div className="row justify-content-center">
                 <div className="col-md-7 col-lg-5">
-                    {
-                        formState.error && <div className="alert alert-danger" role="alert">
-                            {formState.error}
-                        </div>
-                    }
+                    {displayAlertDiv(formState.error, "danger")}
                     <div className="card">
                         <div className="card-body">
                             <h3 className="card-title text-center mb-4">Login</h3>
-                            {
-                                formState.infoMessage && 
-                                    <div className="alert alert-info">
-                                        {formState.infoMessage}
-                                    </div>
-                            }
+                            {displayAlertDiv(formState.infoMessage, "info")}
                             <form onSubmit={handleSubmit}>
                                 <div className="mb-3">
                                     <label htmlFor="username" className="form-label">Username</label>

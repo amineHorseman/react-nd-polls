@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { displayAlertDiv } from "../utils/helpers";
 import { useAuthedUser } from '../hooks/useAuthedUser';
 import { updateUser } from '../features/users/usersSlice';
 import { handleFormChange, displayAvatar } from "../utils/helpers";
@@ -48,6 +49,7 @@ const Profile = () => {
         <div className="container mt-4">
             <div className="row justify-content-center">
                 <div className="col-md-6">
+                    {displayAlertDiv(formState.error, "danger")}
                     <div className="card">
                         <div className="card-header bg-primary text-white">
                             <h4 className="mb-0">Change profile information</h4>
@@ -57,11 +59,7 @@ const Profile = () => {
                             <h5 className="mt-2">@{user.id}</h5>
                         </div>
                         <div className="card-body">
-                            {formState.success && (
-                                <div className="alert alert-success" role="alert">
-                                    {formState.success}
-                                </div>
-                            )}
+                            {displayAlertDiv(formState.success, "success")}
                             <form onSubmit={handleSubmit}>
                                 <div className="mb-3">
                                     <label htmlFor="name" className="form-label">Name</label>

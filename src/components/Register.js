@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router';
+import { displayAlertDiv } from "../utils/helpers";
 import { handleFormChange } from '../utils/helpers';
 import { loginUser } from '../features/auth/authSlice';
 import { registerUser } from '../features/users/usersSlice';
@@ -39,11 +40,7 @@ const Register = () => {
     return <div className="container mt-5">
             <div className="row justify-content-center">
                 <div className="col-md-8 col-lg-6">
-                    {
-                        formState.error && <div className="alert alert-danger" role="alert">
-                            {formState.error}
-                        </div>
-                    }
+                    {displayAlertDiv(formState.error, "danger")}
                     <div className="card">
                         <div className="card-body">
                             <h3 className="card-title text-center mb-4">Create a new account</h3>

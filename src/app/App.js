@@ -16,6 +16,7 @@ import { clearQuestionsError, selectQuestionsError } from "../features/questions
 import { clearUsersError, fetchUsers, selectUsersError } from "../features/users/usersSlice";
 import { fetchQuestions } from "../features/questions/questionsSlice";
 import { Routes, Route, Navigate, useLocation } from 'react-router';
+import { displayNotificationDiv } from '../utils/helpers.js';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 
@@ -81,15 +82,12 @@ const App = () => {
       </Routes>
       {
         // show error notification
-        (usersError || questionsError) && <div className="alert alert-danger position-fixed bottom-0 start-0 w-auto notification">
-            An error occurred! Please try again.
-        </div>
+        (usersError || questionsError) && 
+          displayNotificationDiv("An error occurred! Please try again", "danger")
       }
       {
         // show auth status notification
-        authStatus && <div className="alert alert-info position-fixed bottom-0 start-0 w-auto notification">
-            {authStatus}
-        </div>
+        authStatus && displayNotificationDiv(authStatus, "info")
       }
     </div>
   );
