@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { handleFormChange } from "../utils/helpers";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../features/users/usersSlice";
 import { loginUser, logoutUser } from "../features/auth/authSlice";
@@ -31,17 +32,6 @@ const Login = () => {
                 error: ''}));
         }
     }, [searchParams, location.state, dispatch]);
-
-    const handleUsernameChange = (e) => {
-        setFormState(formState => ({...formState, 
-            username: e.target.value,
-            error: ''}));
-    };
-    const handlePasswordChange = (e) => {
-        setFormState(formState => ({...formState, 
-            password: e.target.value,
-            error: ''}));
-    };
 
     const handleSubmit = (e) => {
         // dispatch action to login user (will set up `auth` state)
@@ -81,14 +71,14 @@ const Login = () => {
                                 <div className="mb-3">
                                     <label htmlFor="username" className="form-label">Username</label>
                                     <input type="text" className="form-control" id="username" data-testid="username"
-                                        placeholder="Enter username" onChange={handleUsernameChange} required
-                                        autoComplete="on" />
+                                        placeholder="Enter username" autoComplete="on"  required
+                                        onChange={(e) => handleFormChange(e, 'username', setFormState)} />
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="password" className="form-label">Password</label>
                                     <input type="password" className="form-control" id="password" data-testid="password"
-                                        placeholder="Enter password" onChange={handlePasswordChange} required 
-                                        autoComplete="on"  />
+                                        placeholder="Enter password" autoComplete="on" required 
+                                        onChange={(e) => handleFormChange(e, 'password', setFormState)} />
                                 </div>
                                 <button type="submit" className="btn btn-primary w-100" data-testid="submit">Submit</button>
                                 <div className="mt-3 mb-3">

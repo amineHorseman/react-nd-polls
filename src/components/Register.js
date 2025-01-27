@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router';
+import { handleFormChange } from '../utils/helpers';
 import { loginUser } from '../features/auth/authSlice';
 import { registerUser } from '../features/users/usersSlice';
 
@@ -13,12 +14,6 @@ const Register = () => {
         name: '',
         error: ''
     });
-
-    const handleFormChange = (e, field) => {
-        setFormState(formState => ({...formState, 
-            [field]: e.target.value,
-            error: ''}));
-    };
 
     const handleSubmit = async (e) => {
         // dispatch action to regiser user
@@ -57,21 +52,21 @@ const Register = () => {
                                     <label htmlFor="username" className="form-label">Username</label>
                                     <input type="text" className="form-control" id="username" data-testid="username"
                                         placeholder="Enter username" value={formState.username}
-                                        onChange={(e) => handleFormChange(e, 'username')} 
+                                        onChange={(e) => handleFormChange(e, 'username', setFormState)} 
                                         autoComplete="on" required />
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="name" className="form-label">Full name</label>
                                     <input type="text" className="form-control" id="name" data-testid="name" 
                                         placeholder="Enter name" value={formState.name}
-                                        onChange={(e) => handleFormChange(e, 'name')} 
+                                        onChange={(e) => handleFormChange(e, 'name', setFormState)} 
                                         autoComplete="on" required />
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="password" className="form-label">Password</label>
                                     <input type="password" className="form-control" id="password" data-testid="password"
                                         placeholder="Enter password" value={formState.password}
-                                        onChange={(e) => handleFormChange(e, 'password')} 
+                                        onChange={(e) => handleFormChange(e, 'password', setFormState)} 
                                         autoComplete="on" required />
                                 </div>
                                 <button type="submit" className="btn btn-primary w-100" data-testid="submit">Register</button> 

@@ -40,3 +40,9 @@ export function getElapsedTime(timestamp) {
     else
         return 'less than a minute ago'
 }
+
+export const handleFormChange = (e, field, setFormState) => {
+    setFormState(formState => ({...formState, 
+        [field]: e.target.value,
+        error: ''}));
+}

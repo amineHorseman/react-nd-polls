@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
+import { handleFormChange } from "../utils/helpers";
 import { useAuthedUser } from "../hooks/useAuthedUser";
 import { addQuestion } from "../features/questions/questionsSlice";
 import { updateUserQuestions } from "../features/users/usersSlice";
@@ -80,13 +81,13 @@ const AddQuestion = ({setProgressBarValue}) => {
                                 <div className="mb-3">
                                     <input type="text" className="form-control" data-testid="optionOne"
                                         placeholder="Enter first option" value={formState.optionOne}
-                                        onChange={(e) => setFormState(formState => ({...formState, optionOne:e.target.value}))}
+                                        onChange={(e) => handleFormChange(e, 'optionOne', setFormState)}
                                         id="optionOne" required />
                                 </div>
                                 <div className="mb-4">
                                     <input type="text" className="form-control" data-testid="optionTwo"
                                         placeholder="Enter second option" value={formState.optionTwo}
-                                        onChange={(e) => setFormState(formState => ({...formState, optionTwo:e.target.value}))}
+                                        onChange={(e) => handleFormChange(e, 'optionTwo', setFormState)}
                                         id="optionTwo" required />
                                 </div>
                                 <div className="d-grid">

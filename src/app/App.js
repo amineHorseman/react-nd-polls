@@ -11,16 +11,17 @@ import QuestionsList from '../components/QuestionsList.js';
 import QuestionDetails from '../components/QuestionDetails.js';
 
 import { selectAuthedUserId, selectAuthStatus, clearAuthStatus } from '../features/auth/authSlice';
-import { clearError, selectQuestionsError } from "../features/questions/questionsSlice";
+import { clearQuestionsError, selectQuestionsError } from "../features/questions/questionsSlice";
+import { clearUsersError, fetchUsers, selectUsersError } from "../features/users/usersSlice";
 import { fetchQuestions } from "../features/questions/questionsSlice";
 import { Routes, Route, Navigate, useLocation } from 'react-router';
-import { fetchUsers } from "../features/users/usersSlice";
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 
 const App = () => {
   const dispatch = useDispatch();
-  const error = useSelector(selectQuestionsError);
+  const questionsError = useSelector(selectQuestionsError);
+  const usersError = useSelector(selectUsersError);
   const authStatus = useSelector(selectAuthStatus);
   const [progressBarValue, setProgressBarValue] = useState(0);
   
@@ -42,13 +43,14 @@ const App = () => {
 
   // dismiss error notification
   useEffect(() => {
-    if (error) {
+    if (usersError || questionsError) {
       const timer = setTimeout(() => {
-        dispatch(clearError());
+        usersError && dispatch(clearUsersError());
+        questionsError && dispatch(clearQuestionsError());
       }, 2000);
       return () => clearTimeout(timer);
     }
-  }, [error, dispatch]);
+  }, [usersError, questionsError, dispatch]);
 
   // dismiss auth status notification
   useEffect(() => {
@@ -77,7 +79,7 @@ const App = () => {
       </Routes>
       {
         // show error notification
-        error && <div className="alert alert-danger position-fixed bottom-0 start-0 w-auto notification">
+        (usersError || questionsError) && <div className="alert alert-danger position-fixed bottom-0 start-0 w-auto notification">
             An error occurred! Please try again.
         </div>
       }

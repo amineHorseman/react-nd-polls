@@ -35,6 +35,7 @@ const usersSlice = createSlice({
     name: "users",
     initialState,
     reducers: {
+        clearUsersError: (state) => { state.error = '' },
         updateUserAnswers: (state, action) => {
             // optimistic update of the user["answers"]
             const { authedUser, qid, answer } = action.payload;
@@ -85,5 +86,9 @@ const usersSlice = createSlice({
 
 export const selectAllUsers = (state) => state.users.users;
 export const selectUser = (state, id) => selectAllUsers(state)[id];
-export const { updateUserAnswers, revertUserAnswers, updateUserQuestions } = usersSlice.actions;
+export const selectUsersError = (state) => state.users.error;
+export const { clearUsersError, 
+               updateUserAnswers,
+               revertUserAnswers,
+               updateUserQuestions } = usersSlice.actions;
 export default usersSlice.reducer;
